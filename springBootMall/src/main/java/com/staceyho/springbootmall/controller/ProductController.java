@@ -9,12 +9,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    //查詢商品列表
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getProducts(){
+
+        List<Product> productList = productService.getProducts();
+
+            return ResponseEntity.status(HttpStatus.OK).body(productList);
+    }
 
 //    查詢商品功能
 //   @PathVariable 可以接住url路徑上的值，只能加在方法上的參數內
