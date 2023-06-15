@@ -17,8 +17,10 @@ public class ProductController {
     private ProductService productService;
 
 //    查詢商品功能
+//   @PathVariable 可以接住url路徑上的值，只能加在方法上的參數內
     @GetMapping("/products/{productId}")
     public ResponseEntity<Product> getProduct(@PathVariable Integer productId){
+
         Product product = productService.getProductByID(productId);
 
         if(product != null){
@@ -29,6 +31,7 @@ public class ProductController {
     }
 
 //    新增商品功能
+//    @Valid 可以讓@NotNull註解生效使用
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest){
         Integer productId = productService.createProduct(productRequest);
@@ -37,6 +40,30 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
+
+//   修改商品功能
+//   @PathVariable 可以接住url路徑上的值，只能加在方法上的參數內
+//   @Valid 可以讓@NotNull註解生效使用
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
+                                                 @RequestBody @Valid ProductRequest productRequest){
+        //檢查product是否存在
+        Product product = productService.getProductByID(productId);
+
+        //存在，修改商品數據
+        if (product != null) {
+            productService.updateProduct(productId, productRequest);
+
+            Product updatedProduct = productService.getProductByID(productId);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
+
+            //不存在，返回404Not Found給前端
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
+
 
 
 }
