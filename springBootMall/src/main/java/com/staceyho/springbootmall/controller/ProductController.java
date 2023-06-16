@@ -21,14 +21,23 @@ public class ProductController {
 
     //查詢商品列表
     //@RequestParam 取得 url 裡面，路徑下所設定好的參數
+    //@RequestParam(defaultValue = value) 提供預設定義好的值
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
-                                                     @RequestParam(required = false) String search
+    public ResponseEntity<List<Product>> getProducts(
+            //查詢條件 Filtering
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search,
+
+            //排序Sorting
+            @RequestParam(defaultValue = "created_date") String orderBy,
+            @RequestParam(defaultValue = "desc") String sort
     ){
 
         PorductQueryParams productQueryParams = new PorductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
+        productQueryParams.setOrderBy(orderBy);
+        productQueryParams.setSort(sort);
 
         List<Product> productList = productService.getProducts(productQueryParams);
 

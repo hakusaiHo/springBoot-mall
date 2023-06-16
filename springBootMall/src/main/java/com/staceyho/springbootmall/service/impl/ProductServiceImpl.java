@@ -1,6 +1,5 @@
 package com.staceyho.springbootmall.service.impl;
 
-import com.staceyho.springbootmall.constant.ProductCategory;
 import com.staceyho.springbootmall.dao.ProductDao;
 import com.staceyho.springbootmall.dto.PorductQueryParams;
 import com.staceyho.springbootmall.dto.ProductRequest;

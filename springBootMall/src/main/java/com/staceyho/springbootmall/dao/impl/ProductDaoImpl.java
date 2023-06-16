@@ -1,6 +1,5 @@
 package com.staceyho.springbootmall.dao.impl;
 
-import com.staceyho.springbootmall.constant.ProductCategory;
 import com.staceyho.springbootmall.dao.ProductDao;
 import com.staceyho.springbootmall.dto.PorductQueryParams;
 import com.staceyho.springbootmall.dto.ProductRequest;
@@ -39,6 +38,9 @@ public class ProductDaoImpl implements ProductDao {
             sql = sql + " AND product_name LIKE :search";
             map.put("search", "%"+ productQueryParams.getSearch() + "%");
         }
+
+        //實作Spring JDBC Template ODER BY 語句的限制，只能用字串去做拼接
+        sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new productRowMapper());
         return productList;
