@@ -1,5 +1,6 @@
 package com.staceyho.springbootmall.controller;
 
+import com.staceyho.springbootmall.constant.ProductCategory;
 import com.staceyho.springbootmall.dto.ProductRequest;
 import com.staceyho.springbootmall.model.Product;
 import com.staceyho.springbootmall.service.ProductService;
@@ -18,10 +19,13 @@ public class ProductController {
     private ProductService productService;
 
     //查詢商品列表
+    //@RequestParam 取得 url 裡面，路徑下所設定好的參數
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(){
+    public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
+                                                     @RequestParam(required = false) String search
+    ){
 
-        List<Product> productList = productService.getProducts();
+        List<Product> productList = productService.getProducts(category, search);
 
             return ResponseEntity.status(HttpStatus.OK).body(productList);
     }

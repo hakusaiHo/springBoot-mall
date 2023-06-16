@@ -1,5 +1,6 @@
 package com.staceyho.springbootmall.dao.impl;
 
+import com.staceyho.springbootmall.constant.ProductCategory;
 import com.staceyho.springbootmall.dao.ProductDao;
 import com.staceyho.springbootmall.dto.ProductRequest;
 import com.staceyho.springbootmall.model.Product;
@@ -22,11 +23,21 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory category, String search) {
         String sql = "SELECT product_id,product_name, category, image_url, price, stock, description, created_date, " +
-                "last_modified_date FROM product";
+                "last_modified_date FROM product WHERE 1=1";  //動態產生SQL查詢條件
 
         Map<String, Object> map = new HashMap<>();
+
+        if(category != null){
+            sql = sql + " AND category = :category";
+            map.put("category", category.toString()); //或是用.name()方法去處理enum類型
+        }
+
+        if(search != null){
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%"+ search + "%");
+        }
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new productRowMapper());
         return productList;
