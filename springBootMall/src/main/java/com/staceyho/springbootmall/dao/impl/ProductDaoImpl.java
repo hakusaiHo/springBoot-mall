@@ -29,6 +29,7 @@ public class ProductDaoImpl implements ProductDao {
 
         Map<String, Object> map = new HashMap<>();
 
+        //查詢條件
         if(productQueryParams.getCategory() != null){
             sql = sql + " AND category = :category";
             map.put("category", productQueryParams.getCategory().toString()); //或是用.name()方法去處理enum類型
@@ -39,12 +40,19 @@ public class ProductDaoImpl implements ProductDao {
             map.put("search", "%"+ productQueryParams.getSearch() + "%");
         }
 
+        //排序
         //實作Spring JDBC Template ODER BY 語句的限制，只能用字串去做拼接
         sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
+
+        //分頁
+        sql = sql + " LIMIT :limit OFFSET :offset";
+        map.put("limit", productQueryParams.getLimit());
+        map.put("offset", productQueryParams.getOffset());
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new productRowMapper());
         return productList;
     }
+
 
     @Override
     public Product getProductById(Integer productId) {
