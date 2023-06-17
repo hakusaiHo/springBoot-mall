@@ -5,6 +5,7 @@ import com.staceyho.springbootmall.dto.PorductQueryParams;
 import com.staceyho.springbootmall.dto.ProductRequest;
 import com.staceyho.springbootmall.model.Product;
 import com.staceyho.springbootmall.service.ProductService;
+import com.staceyho.springbootmall.utill.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-@Validated
+@Validated //@RequestParam 使驗證請求參數的註解生效
 @RestController
 public class ProductController {
 
@@ -27,7 +28,7 @@ public class ProductController {
     //@RequestParam 取得 url 裡面，路徑下所設定好的參數
     //@RequestParam(defaultValue = value) 提供預設定義好的值
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<Page<Product>> getProducts(
             //查詢條件 Filtering
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search,
@@ -49,9 +50,20 @@ public class ProductController {
         productQueryParams.setLimit(limit);
         productQueryParams.setOffset(offset);
 
+        //取得productList(商品列表數據)
         List<Product> productList = productService.getProducts(productQueryParams);
 
-            return ResponseEntity.status(HttpStatus.OK).body(productList);
+        //取得product總筆數
+        Integer total = productService.countProduct(productQueryParams);
+
+        //分頁
+        Page<Product> page = new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(productList);
+
+            return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
 //    查詢商品功能

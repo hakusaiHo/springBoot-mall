@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ProductService {
 
+    Integer countProduct(PorductQueryParams productQueryParams);
+
     List<Product> getProducts(PorductQueryParams productQueryParams);
 
     Product getProductByID(Integer productId);
