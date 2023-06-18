@@ -99,7 +99,7 @@ public class ProductDaoImpl implements ProductDao {
         map.put("createdDate", now);
         map.put("lastModifiedDate", now);
 
-//        新增自主鍵值，並儲存資料庫自動生成的productId
+//      新增自主鍵值，並儲存資料庫自動生成的productId
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);

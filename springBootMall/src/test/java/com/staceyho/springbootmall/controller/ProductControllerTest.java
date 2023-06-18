@@ -26,7 +26,7 @@ public class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper(); // 將 json 和 Java 的 Object 的互相轉換
 
     // 查詢商品
     @Test
