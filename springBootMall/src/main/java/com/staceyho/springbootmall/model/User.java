@@ -9,7 +9,6 @@ public class User {
 
     private Integer userId;
 
-    @JsonProperty("e_mail")
     private String email;
 
     @JsonIgnore //當Spring boot在把這個Object轉換成Json格式的時候，會忽略這個變數(隱藏起來不回傳給前端)
