@@ -5,6 +5,7 @@ import com.staceyho.springbootmall.dao.ProductDao;
 import com.staceyho.springbootmall.dao.UserDao;
 import com.staceyho.springbootmall.dto.BuyItem;
 import com.staceyho.springbootmall.dto.CreateOrderRequest;
+import com.staceyho.springbootmall.dto.OrderQueryParams;
 import com.staceyho.springbootmall.model.Order;
 import com.staceyho.springbootmall.model.OrderItem;
 import com.staceyho.springbootmall.model.Product;
@@ -34,6 +35,27 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
 
     private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        for (Order order : orderList){
+
+            List<OrderItem> orderItemList =  orderDao.getOrderItemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
 
     @Override
     public Order getOrderById(Integer orderId) {
